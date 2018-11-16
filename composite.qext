@@ -1,0 +1,16 @@
+{
+    "name": "Composite object",
+    "description": "Create a pixel perfect object composition",
+    "type": "visualization",
+    "version": "1.0.0",
+    "preview": "preview.png",
+    "keywords": "qlik-sense, visualization, kpi, compose",
+    "author": "",
+    "homepage": "",
+    "license": "",
+    "icon" : "library",
+    "repository": "",
+    "dependencies": {
+        "qlik-sense": ">=5.5.x"
+    }
+}

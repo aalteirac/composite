@@ -1,0 +1,44 @@
+ .qv-object-composite div.viz-with-export {
+   height: calc(100% - 37.99px);
+   height: -o-calc(100% - 37.99px);
+   height: -webkit-calc(100% - 37.99px);
+   height: -moz-calc(100% - 37.99px);
+   width: 100%;
+ }
+ .qv-object-composite .qv-object-content{
+  overflow: hidden;
+ }
+.mask{
+  z-index: 1000;
+  border: 1px dashed #ccc;
+}
+.qv-object-composite div.viz-without-export {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+}
+
+.qv-object-composite article.qv-object:not(.qv-selections-active) {
+  border: 0  !important;
+}
+
+.qv-object-composite div.qv-inner-object {
+  padding: 0px !important;
+  overflow: visible;
+}
+.qv-mode-edit .qv-object-composite div.qv-inner-object {
+  overflow: hidden;
+}
+
+.qv-object-composite .composite {
+  height: 100%;
+  width: 100%;
+}
+
+.qv-object-composite .interaction-block {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 50px;
+  z-index: 10;
+}
