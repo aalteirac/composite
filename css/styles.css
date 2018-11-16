@@ -10,7 +10,7 @@
  }
 .mask{
   z-index: 1000;
-  border: 1px dashed #ccc;
+  border: 1px dashed #fab761;
 }
 .qv-object-composite div.viz-without-export {
   position: absolute;
