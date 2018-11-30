@@ -86,7 +86,7 @@ define(["qlik"], function (qlik) {
                 component: "dropdown",
                 label: "Master Object",
                 defaultValue: "",
-                options: function () {
+                options: function () { 
                     if (masterobjects) {
                         return masterobjects;
                     }
