@@ -164,29 +164,35 @@ define(["qlik"], function (qlik) {
         items: {
             general: {
                 items: {
-                  showTitles: {
+                    showTitles: {
                         defaultValue: false
-                  }
+                    }
+                }
             },
             landingpage: {
                 type: "items",
                 label: "Background Info",
                 ref: "BackgroundInfo",
                 items: {
-                  background_transparency: {
-                    ref: "background.transparency",
-                    label: "transparency",
-                    type: "string",
-                    expression: "optional"
-                  },
-                  background_color: {
-                    ref: "background.color",
-                    label: "Background Hex Color",
-                    type: "string",
-                    expression: "optional"
-                  }
+                    background_transparency: {
+                        ref: "background.transparency",
+                        label: "transparency",
+                        type: "string",
+                        expression: "optional"
+                    },
+                    background_color: {
+                        ref: "background.color",
+                        label: "Background Hex Color",
+                        type: "string",
+                        expression: "optional"
+                    }
                 }
-              }
+            },
+            debugmode: {
+                type: "boolean",
+                label: "Debug Mode",
+                ref: "DebugMode",
+                defaultValue: true
             },
             selections: {
                 show: false
