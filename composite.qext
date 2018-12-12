@@ -1,15 +1,15 @@
 {
-    "name": "Composite object",
+    "name": "Composite object Extended",
     "description": "Create a pixel perfect object composition",
     "type": "visualization",
     "version": "1.0.0",
     "preview": "preview.png",
     "keywords": "qlik-sense, visualization, kpi, compose, composite, designer",
-    "author": "",
-    "homepage": "",
-    "license": "",
+    "author": "Philipp Frenzel",
+    "homepage": "www.beeye.org",
+    "license": "MIT",
     "icon" : "library",
-    "repository": "",
+    "repository": "https://www.github.com/philippfrenzel/composite",
     "dependencies": {
         "qlik-sense": ">=5.5.x"
     }
