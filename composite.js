@@ -209,35 +209,36 @@ function ($, qlik, props,interact, cssContent) {
 			}
             
             function decimalToHex(d, padding) {
-					var hex = Number(d).toString(16);
-					padding = typeof (padding) === "undefined" || padding === null ? padding = 2 : padding;
+				var hex = Number(d).toString(16);
+				padding = typeof (padding) === "undefined" || padding === null ? padding = 2 : padding;
 
-					while (hex.length < padding) {
-						hex = "0" + hex;
-					}
-
-					return hex;
+				while (hex.length < padding) {
+					hex = "0" + hex;
 				}
 
-				var BackgroundTrans = layout.background.transparency;
+				return hex;
+			}
 
-				function hexToRgb(hex) {
-					var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-					return result ? {
-						r: parseInt(result[1], 16),
-						g: parseInt(result[2], 16),
-						b: parseInt(result[3], 16)
-					} : null;
-				}
+			var BackgroundTrans = layout.background.transparency;
 
-				var RGBAString = 'rgba(' + hexToRgb(layout.background.color).r + ',' + hexToRgb(layout.background.color).g  + ',' + hexToRgb(layout.background.color).b  + ',' + BackgroundTrans +')';
+			function hexToRgb(hex) {
+				var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+				return result ? {
+					r: parseInt(result[1], 16),
+					g: parseInt(result[2], 16),
+					b: parseInt(result[3], 16)
+				} : null;
+			}
 
-				$(document).ready(function () {
-					console.log("ready");
-					$("#"+id).css('background-color',RGBAString);
-					var parentElement = $element[0].parentElement.parentElement.parentElement.parentElement.parentElement;
-					$(parentElement).css("visibility","hidden");
-				});
+			var RGBAString = 'rgba(' + hexToRgb(layout.background.color).r + ',' + hexToRgb(layout.background.color).g  + ',' + hexToRgb(layout.background.color).b  + ',' + BackgroundTrans +')';
+
+			$(document).ready(function () {
+				console.log("ready");
+				console.log("Try to write background with color: " + RGBAString);
+				$("#"+id).css('background-color',RGBAString);
+				//var parentElement = $element[0].parentElement.parentElement.parentElement.parentElement.parentElement;
+				//$(parentElement).css("visibility","hidden");
+			});
 
           	if (layout.DebugMode == undefined) {
             	var debugmode = false;
