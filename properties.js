@@ -211,7 +211,15 @@ define(["qlik"], function (qlik) {
         type: "items",
         component: "accordion",
         items: {
-            settings: settings
+            settings: settings,
+          	addons: {
+                uses: "addons",
+                items: {
+                    dataHandling: {
+                        uses: "dataHandling"
+                    }
+                }
+            }
         }
     };
 });
