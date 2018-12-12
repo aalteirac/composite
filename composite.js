@@ -207,6 +207,30 @@ function ($, qlik, props,interact, cssContent) {
 				if(mode==='edit')												//enable drag and size in edit mode
 					$('.mask').show();
 			}
+            
+            function decimalToHex(d, padding) {
+				var hex = Number(d).toString(16);
+				padding = typeof (padding) === "undefined" || padding === null ? padding = 2 : padding;
+
+				while (hex.length < padding) {
+					hex = "0" + hex;
+				}
+
+				return hex;
+			}
+
+			var BackgroundTrans = layout.background.transparency;
+
+			function hexToRgb(hex) {
+				var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+				return result ? {
+					r: parseInt(result[1], 16),
+					g: parseInt(result[2], 16),
+					b: parseInt(result[3], 16)
+				} : null;
+			}
+			var RGBAString = 'rgba(' + hexToRgb(layout.background.color.color).r + ',' + hexToRgb(layout.background.color.color).g  + ',' + hexToRgb(layout.background.color.color).b  + ',' + BackgroundTrans +')';
+			$("#"+id).css('background-color',RGBAString);
 		}
 	};
 });

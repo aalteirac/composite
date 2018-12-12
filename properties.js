@@ -169,6 +169,31 @@ define(["qlik"], function (qlik) {
                     }
                 }
             },
+            landingpage: {
+                type: "items",
+                label: "Background Color",
+                ref: "BackgroundInfo",
+                items: {
+                    background_transparency: {
+                        ref: "background.transparency",
+                        label: "Background Transparency",
+                        component: "slider",
+                        min: 0,
+                        max: 1,
+                        step: 0.1,
+                        defaultValue: "1"
+                    },
+                    background_color:{
+                        type: "string",
+                        component: "color-picker",
+                        expression: "optional",
+                        label: "Background Color",
+                        ref: "background.color",
+                        dualOutput: true,
+                        defaultValue: "#ffffff"
+                        }
+                }
+            },
             selections: {
                 show: false
             },
@@ -186,7 +211,15 @@ define(["qlik"], function (qlik) {
         type: "items",
         component: "accordion",
         items: {
-            settings: settings
+            settings: settings,
+          	addons: {
+                uses: "addons",
+                items: {
+                    dataHandling: {
+                        uses: "dataHandling"
+                    }
+                }
+            }
         }
     };
 });
