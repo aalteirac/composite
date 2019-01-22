@@ -1,4 +1,7 @@
- .qv-object-composite div.viz-with-export {
+.qv-rebrand2018 .composite .qv-object-header {
+    border-bottom: 0px solid #f2f2f2;
+}  
+.qv-object-composite div.viz-with-export {
    height: calc(100% - 37.99px);
    height: -o-calc(100% - 37.99px);
    height: -webkit-calc(100% - 37.99px);
