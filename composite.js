@@ -84,8 +84,9 @@ function ($, qlik, props,interact, cssContent) {
 				layout.props[target.attr("obj-id")].rawSize=w+"#"+h;
 			}
 			clearTimeout(resizeTimeout);
-			resizeTimeout = setTimeout(()=>{    
-				save(self,layout)
+			resizeTimeout = setTimeout(()=>{  
+				if(mode==='edit')
+					save(self,layout)
 			}, 1000);
 		},
 		paint: function ($element, layout) {
@@ -232,7 +233,8 @@ function ($, qlik, props,interact, cssContent) {
 					var rh=$("#"+id).find(uniqSelector).height()/$element.height();
 					layout.props[obKey+i].size=rw+"#"+rh;
 					layout.props[obKey+i].rawSize=w+"#"+h;
-					save(self,layout);
+					if(mode==='edit')
+						save(self,layout);
 				}
 				$('.mask').hide();
 				if(mode==='edit')												//enable drag and size in edit mode
