@@ -6,7 +6,7 @@
     height: 0px!important;
 }
 .composite .qv-inner-object, .sheet-list #grid .cell-content .qv-object-composite .qv-object {
-    background-color: rgb(255,255,255,0) !important;
+    background-color: rgba(255,255,255,0) !important;
 }
 .qv-object-composite div.viz-with-export {
    height: calc(100% - 37.99px);
