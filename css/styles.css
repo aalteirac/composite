@@ -1,6 +1,13 @@
-.qv-rebrand2018 .composite .qv-object-header {
+.qv-rebrand2018 .composite .qv-object-header, .qv-rebrand2018 .qv-object-composite .qv-object-header{
     border-bottom: 0px solid #f2f2f2;
-}  
+}
+
+.zoom .qv-object-header.thin {
+    height: 0px!important;
+}
+.composite .qv-inner-object, .sheet-list #grid .cell-content .qv-object-composite .qv-object {
+    background-color: rgb(255,255,255,0) !important;
+}
 .qv-object-composite div.viz-with-export {
    height: calc(100% - 37.99px);
    height: -o-calc(100% - 37.99px);
