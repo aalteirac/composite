@@ -33,11 +33,11 @@ function ($, qlik, props,interact, cssContent) {
 		return [mask,objContainer];
 	}
 
-	async function save(me,layout){
-		var props=await me.backendApi.getProperties();
-		props.props=layout.props;
-		var ret=await me.backendApi.setProperties(props);
-		return true;
+	function save(me,layout){
+		me.backendApi.getProperties().then(function(reply){
+			reply.props=layout.props;
+			me.backendApi.setProperties(reply);
+		})
 	}
 
 
@@ -54,7 +54,7 @@ function ($, qlik, props,interact, cssContent) {
 		beforeDestroy: function () {
 		
 		},
-		resize: async function ($element, layout) {
+		resize: function ($element, layout) {
 			var self=this;
 			var id = layout.qInfo.qId;
 			var props = layout.props;
@@ -88,7 +88,7 @@ function ($, qlik, props,interact, cssContent) {
 				save(self,layout)
 			}, 1000);
 		},
-		paint: async function ($element, layout) {
+		paint: function ($element, layout) {
 			var self = this;
 			var id = layout.qInfo.qId;
 			var props = layout.props;
@@ -158,7 +158,7 @@ function ($, qlik, props,interact, cssContent) {
 					$(`.obj[obid='${target.getAttribute("obid")}']`).css('transform','translate(' + x + 'px,' + y + 'px)');
 					$(`.obj[obid='${target.getAttribute("obid")}']`).css('width',target.style.width).css('height',target.style.height);
 					
-				}).on('resizeend', async function (event) {
+				}).on('resizeend', function (event) {
 					var target = event.target,
 						x = (parseFloat(target.getAttribute('data-x')) || 0),
 						y = (parseFloat(target.getAttribute('data-y')) || 0);
@@ -174,7 +174,7 @@ function ($, qlik, props,interact, cssContent) {
 						layout.props[event.target.getAttribute("obj-id")].size=rw+"#"+rh;
 						layout.props[event.target.getAttribute("obj-id")].rawSize=w+"#"+h;
 					}
-					await save(self,layout)
+					save(self,layout)
 					qlik.resize(`.obj[obid='${target.getAttribute("obid")}']`);
 				});
 			}
@@ -232,7 +232,7 @@ function ($, qlik, props,interact, cssContent) {
 					var rh=$("#"+id).find(uniqSelector).height()/$element.height();
 					layout.props[obKey+i].size=rw+"#"+rh;
 					layout.props[obKey+i].rawSize=w+"#"+h;
-					await save(self,layout);
+					save(self,layout);
 				}
 				$('.mask').hide();
 				if(mode==='edit')												//enable drag and size in edit mode
