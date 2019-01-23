@@ -9,6 +9,7 @@ function ($, qlik, props,interact, cssContent) {
 	var painted=false;
 	var btn;
 	var	app = qlik.currApp(this);
+	var resizeTimeout;
 	const obKey = 'obj';
 	var TEMPLATE = {
 		MASK: '<div class="qvobject mask viz-without-export"></div>',
@@ -32,18 +33,17 @@ function ($, qlik, props,interact, cssContent) {
 		return [mask,objContainer];
 	}
 
-	function save(me,layout){
-		me.backendApi.getProperties().then(function(reply){
-			reply.props=layout.props;
-			me.backendApi.setProperties(reply);
-		})
+	async function save(me,layout){
+		var props=await me.backendApi.getProperties();
+		props.props=layout.props;
+		var ret=await me.backendApi.setProperties(props);
+		return true;
 	}
 
 
 	return {
 		initialProperties: {
 			version : 1.0,
-			activeTab: 1
 		},
 		definition: props,
 		support: {
@@ -52,15 +52,43 @@ function ($, qlik, props,interact, cssContent) {
 			snapshot: false
 		},
 		beforeDestroy: function () {
-			currActiveTab = null;
-
-			if (btn) {
-				btn.off();
-				btn.remove();
-				btn = null;
-			}
+		
 		},
-		paint: function ($element, layout) {
+		resize: async function ($element, layout) {
+			var self=this;
+			var id = layout.qInfo.qId;
+			var props = layout.props;
+			var i="1";
+			this.paint($element,layout);
+			for (var i = 1; i <= props.objNumber; i++) {
+				var chartId = props[obKey+i].chart;
+				var objectOptions = {
+					'noInteraction': props[obKey+i].interact,
+					'noSelections': props[obKey+i].select,
+					'pix':props[obKey+i].pix
+				};
+				var uniqSelector=`[obid='${getId(id,obKey+i,chartId,objectOptions)}']`;
+				var target = $("#"+id).find(uniqSelector),
+						x = (parseFloat(target.attr('data-x')) || 0),
+						y = (parseFloat(target.attr('data-y')) || 0);
+				var w=target.width();
+				var h=target.height();
+				var rw=target.width()/$element.width();
+				var rh=target.height()/$element.height();
+				var rx=x/$element.width();
+				var ry=y/$element.height();
+				//console.log("coord",rx+"#"+ry,"rawCoord",x+"#"+y,"size",rw+"#"+rh,"rawSize",w+"#"+h);
+				layout.props[target.attr("obj-id")].coord=rx+"#"+ry;
+				layout.props[target.attr("obj-id")].rawCoord=x+"#"+y;
+				layout.props[target.attr("obj-id")].size=rw+"#"+rh;
+				layout.props[target.attr("obj-id")].rawSize=w+"#"+h;
+			}
+			clearTimeout(resizeTimeout);
+			resizeTimeout = setTimeout(()=>{    
+				save(self,layout)
+			}, 1000);
+		},
+		paint: async function ($element, layout) {
 			var self = this;
 			var id = layout.qInfo.qId;
 			var props = layout.props;
@@ -97,9 +125,11 @@ function ($, qlik, props,interact, cssContent) {
 						var y=parseInt(event.target.getAttribute('data-y'));
 						var rx=x/$element.width();
 						var ry=y/$element.height();
-						layout.props[event.target.getAttribute("obj-id")].coord=rx+"#"+ry;
-						layout.props[event.target.getAttribute("obj-id")].rawCoord=x+"#"+y;
-						save(self,layout)
+						if(!isNaN(x) && !isNaN(y) && !isNaN(rx) && !isNaN(ry)){
+							layout.props[event.target.getAttribute("obj-id")].coord=rx+"#"+ry;
+							layout.props[event.target.getAttribute("obj-id")].rawCoord=x+"#"+y;
+							save(self,layout);
+						}
 					}
 				})
 				.resizable({
@@ -128,7 +158,7 @@ function ($, qlik, props,interact, cssContent) {
 					$(`.obj[obid='${target.getAttribute("obid")}']`).css('transform','translate(' + x + 'px,' + y + 'px)');
 					$(`.obj[obid='${target.getAttribute("obid")}']`).css('width',target.style.width).css('height',target.style.height);
 					
-				}).on('resizeend', function (event) {
+				}).on('resizeend', async function (event) {
 					var target = event.target,
 						x = (parseFloat(target.getAttribute('data-x')) || 0),
 						y = (parseFloat(target.getAttribute('data-y')) || 0);
@@ -138,11 +168,13 @@ function ($, qlik, props,interact, cssContent) {
 					var rh=$(target).height()/$element.height();
 					var rx=x/$element.width();
 					var ry=y/$element.height();
-					layout.props[event.target.getAttribute("obj-id")].coord=rx+"#"+ry;
-					layout.props[event.target.getAttribute("obj-id")].rawCoord=x+"#"+y;
-					layout.props[event.target.getAttribute("obj-id")].size=rw+"#"+rh;
-					layout.props[event.target.getAttribute("obj-id")].rawSize=w+"#"+h;
-					save(self,layout)
+					if(!isNaN(x) && !isNaN(y) && !isNaN(rx) && !isNaN(ry) && !isNaN(rh) && !isNaN(rw) && !isNaN(w) && !isNaN(h)){
+						layout.props[event.target.getAttribute("obj-id")].coord=rx+"#"+ry;
+						layout.props[event.target.getAttribute("obj-id")].rawCoord=x+"#"+y;
+						layout.props[event.target.getAttribute("obj-id")].size=rw+"#"+rh;
+						layout.props[event.target.getAttribute("obj-id")].rawSize=w+"#"+h;
+					}
+					await save(self,layout)
 					qlik.resize(`.obj[obid='${target.getAttribute("obid")}']`);
 				});
 			}
@@ -157,7 +189,6 @@ function ($, qlik, props,interact, cssContent) {
 				layout.props[obKey+i].rawCoord="0#0";
 				layout.props[obKey+i].size="";
 				layout.props[obKey+i].rawSize="";
-				save(self,layout)
 			}
 			for (var i = 1; i <= props.objNumber; i++) {						//display objects
 				var chartId = props[obKey+i].chart;
@@ -201,7 +232,7 @@ function ($, qlik, props,interact, cssContent) {
 					var rh=$("#"+id).find(uniqSelector).height()/$element.height();
 					layout.props[obKey+i].size=rw+"#"+rh;
 					layout.props[obKey+i].rawSize=w+"#"+h;
-					save(self,layout);
+					await save(self,layout);
 				}
 				$('.mask').hide();
 				if(mode==='edit')												//enable drag and size in edit mode
@@ -229,7 +260,8 @@ function ($, qlik, props,interact, cssContent) {
 					b: parseInt(result[3], 16)
 				} : null;
 			}
-			var RGBAString = 'rgba(' + hexToRgb(layout.background.color.color).r + ',' + hexToRgb(layout.background.color.color).g  + ',' + hexToRgb(layout.background.color.color).b  + ',' + BackgroundTrans +')';
+			var col=layout.background.color.color?layout.background.color.color:layout.background.color;
+			var RGBAString = 'rgba(' + hexToRgb(col).r + ',' + hexToRgb(col).g  + ',' + hexToRgb(col).b  + ',' + BackgroundTrans +')';
 			$("#"+id).css('background-color',RGBAString);
 		}
 	};
