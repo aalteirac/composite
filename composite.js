@@ -78,13 +78,16 @@ function ($, qlik, props,interact, cssContent) {
 				var rx=x/$element.width();
 				var ry=y/$element.height();
 				//console.log("coord",rx+"#"+ry,"rawCoord",x+"#"+y,"size",rw+"#"+rh,"rawSize",w+"#"+h);
-				layout.props[target.attr("obj-id")].coord=rx+"#"+ry;
-				layout.props[target.attr("obj-id")].rawCoord=x+"#"+y;
-				layout.props[target.attr("obj-id")].size=rw+"#"+rh;
-				layout.props[target.attr("obj-id")].rawSize=w+"#"+h;
+				if(!isNaN(x) && !isNaN(y) && !isNaN(rx) && !isNaN(ry)){
+					layout.props[target.attr("obj-id")].coord=rx+"#"+ry;
+					layout.props[target.attr("obj-id")].rawCoord=x+"#"+y;
+					layout.props[target.attr("obj-id")].size=rw+"#"+rh;
+					layout.props[target.attr("obj-id")].rawSize=w+"#"+h;
+				}
 			}
 			clearTimeout(resizeTimeout);
 			resizeTimeout = setTimeout(()=>{  
+			var mode=qlik.navigation.getMode();
 				if(mode==='edit')
 					save(self,layout)
 			}, 1000);
