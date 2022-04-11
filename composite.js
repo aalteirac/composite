@@ -5,6 +5,7 @@ define([
 	'./interact',
 	'css!./css/styles.css'
 ],
+//test
 function ($, qlik, props,interact, cssContent) {
 	var painted=false;
 	var btn;
